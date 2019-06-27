@@ -1,0 +1,253 @@
+<!doctype html>
+<html style="height:100%">
+<head>
+       {% load staticfiles %}
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=9">
+<title>新增账号</title>
+     {% csrf_token %}
+    <link href="{% static 'css/yds/base.css'  %}" rel="stylesheet" >
+    <script src="{% static 'js/yds/base.js' %}"></script>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/jquery.validate.js' %}"></script>
+    <script src="{% static 'js/jquery.validate.js' %}"></script>
+    <link href="{% static 'css/bootstrap.css'  %}" rel="stylesheet" />
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+<script>
+$().ready(function() {
+// 在键盘按下并释放及提交后验证提交表单
+  $("#add_account_form").validate({
+    rules: {
+      username: {
+        required: true,
+        minlength: 2,
+        remote:{
+
+                    type:"POST",
+                    url:"/check_username/", //请求地址
+                    data:{
+                     csrfmiddlewaretoken: '{{ csrf_token }}',
+                        "username":function(){return $("#username").val();}
+                    }
+                }
+
+      },
+      password1: {
+        required: true,
+        minlength: 8
+      },
+      password2: {
+        required: true,
+        minlength: 8,
+        equalTo: "#password1"
+      },
+       phone:{
+	      minlength: 11,
+          maxlength: 11,
+          digits:true
+	      }
+
+    },
+     messages: {
+	    	username: {
+	        required: "请输入用户名",
+	        minlength: "用户名至少8位",
+	        remote: "用户名已存在"
+	      },
+	      password1: {
+	          required: "请输入密码",
+	          minlength: "密码长度至少8位"
+	        },
+	        password2: {
+	          required: "请输入密码",
+	          <!--minlength: "密码长度不能小于8位",-->
+	          equalTo: "两次密码输入不一致"
+	        },
+	        phone:{
+	        maxlength:"手机号格式错误",
+	        minlength:"手机号格式错误",
+	        digits:"手机号格式错误"
+	        }
+	    }
+    })
+});</script>
+
+
+
+
+<style>
+@charset "utf-8";
+	/* track base Css */
+.container {
+	margin-top:15px;
+}
+.red {
+	color:red;
+}
+#ehong-code-input {
+	width:42px;
+	letter-spacing:2px;
+	margin:0px 8px 0px 0px;
+}
+.ehong-idcode-val {
+	position:relative;
+	padding:1px 4px 1px 4px;
+	top:0px;
+	*top:-3px;
+	letter-spacing:4px;
+	display:inline;
+	cursor:pointer;
+	font-size:16px;
+	font-family:"Courier New",Courier,monospace;
+	text-decoration:none;
+	font-weight:bold;
+}
+.ehong-idcode-val0 {
+	border:solid 1px #A4CDED;
+	background-color:#ECFAFB;
+}
+.ehong-idcode-val1 {
+	border:solid 1px #A4CDED;
+	background-color:#FCEFCF;
+}
+.ehong-idcode-val2 {
+	border:solid 1px #6C9;
+	background-color:#D0F0DF;
+}
+.ehong-idcode-val3 {
+	border:solid 1px #6C9;
+	background-color:#DCDDD8;
+}
+.ehong-idcode-val4 {
+	border:solid 1px #6C9;
+	background-color:#F1DEFF;
+}
+.ehong-idcode-val5 {
+	border:solid 1px #6C9;
+	background-color:#ACE1F1;
+}
+.ehong-code-val-tip {
+	font-size:12px;
+	color:#1098EC;
+	top:0px;
+	*top:-3px;
+	position:relative;
+	margin:0px 0px 0px 4px;
+	cursor:pointer;
+}
+    .input-group{
+        width:40%;
+        margin-left:30%;
+        border-left:none;
+    }
+    .form-control{
+        height:.4rem;
+        width:.4rem;
+        border-left:none;
+        font-size:.12rem;
+    }
+    .input-select{
+        size: 6;
+        width:100%;
+        height:.5rem;
+        text-align:center
+    }
+    .btn{
+        height:.5rem;
+        width: 1.5rem;
+        margin-top:.2rem;
+        border-radius:.1rem;
+        padding-right:0;
+        text-align:center;
+        font-size:.15rem;
+    }
+    .input-img{
+        width:.15rem;
+        height:.15rem
+    }
+</style>
+</head>
+<body style="height:100%;">
+    <div class="col-md-8 col-md-offset-2 " style="width:80%;margin-left:10%;text-align:center;margin-top:2%;">
+        <form action="/add_usr/" class="" method="post" id="add_account_form" style="white-space: nowrap;">
+ {% csrf_token %}
+            <div class="form-group has-feedback" style="overflow:hidden;">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <div class="input-img"><img style="width:100%;" src="/static/img/zhanghaoguanli.png" alt=""></div>
+                    </span>
+                    <input id="username" name="username" class="form-control" placeholder="请输入账号" maxlength="20" type="text">
+                </div>
+
+
+            </div>
+
+            <div class="form-group has-feedback">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <div class="input-img"><img style="width:100%;" src="/static/img/mima.png" alt=""></div>
+                    </span>
+                    <input id="password1" name="password1" class="form-control" placeholder="请输入密码" maxlength="20" type="password">
+                </div>
+
+            </div>
+
+            <div class="form-group has-feedback">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <div class="input-img"><img style="width:100%;" src="/static/img/mima.png" alt=""></div>
+                    </span>
+                    <input id="password2" name="password2" class="form-control" placeholder="请再次输入密码" maxlength="20" type="password">
+                </div>
+
+             <div class="form-group has-feedback" style="margin-top:20px;">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <div class="input-img"><img style="width:100%;" src="/static/img/zhanghao .png" alt=""></div>
+                    </span>
+                    <input id="contact_usr" name="contact_usr" class="form-control" placeholder="请输入联系人姓名" maxlength="20" type="text">
+                </div>
+
+
+            </div>
+
+
+            <div class="form-group has-feedback">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <div class="input-img"><img style="height:100%" src="/static/img/dianhua.png" alt=""></div>
+                        <!--<span class="glyphicon glyphicon-phone"></span>-->
+                    </span>
+                    <input id="phone" name="phone" class="form-control" placeholder="请输入手机号码" maxlength="11" type="text">
+                </div>
+
+            </div>
+
+            <div class="form-group has-feedback">
+                <div class="input-group",name="input-group">
+                    <select class="input-select" name="department_name">
+                        <option value="违建管理部门" name="ibuild">&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;  市政管理部门</option>
+                        <option value="农业管理部门" name="agriculture">&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;  农业管理部门</option>
+                        <option value="林业管理部门" name="forest">&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;  林业管理部门</option>
+                        <option value="环境管理部门" name="road">&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;  环境管理部门</option>
+                        <option value="道路管理部门" name="road">&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;  道路管理部门</option>
+                        <option value="沉降管理部门" name="forest">&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  沉降管理部门</option>
+                    </select>
+                </div>
+
+
+
+
+            <div class="form-group">
+                <input class="btn btn-primary" id="submit" value="添加" type="submit">
+                <input value="重置" id="reset" class=" btn btn-danger" type="reset">
+            </div>
+                </div>
+                </div>
+        </form>
+        <p>{{message}}<p>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>资源分类详查</title>
+    {% load staticfiles %}
+    <link href="{% static 'css/yds/base.css'  %}" rel="stylesheet" >
+    <script src="{% static 'js/yds/base.js' %}"></script>
+    <script src="{% static 'js/yds/jquery.js' %}"></script>
+     <script src="{% static 'js/highcharts.js' %}"></script>
+    <script src="{% static 'js/exporting.js' %}"></script>
+    <!--<script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>-->
+    <!--<script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>-->
+    <style type="text/css">
+        a{
+            text-decoration:none;
+        }
+        .yy-content1{
+            text-align:center;
+            float:left;
+            font-size:.18rem;
+            height:0.4rem;
+            line-height:.4rem;
+        }
+        .yy-header{
+            width:80%;
+            margin-left:10%;
+            height:.4rem;
+            margin-top:.1rem;
+        }
+        .yy-xb{
+            height:.4rem;
+            margin-top:.05rem;
+            margin-left:.18rem;
+            min-height:10px;
+            width:1.5rem;
+            font-size:.15rem
+        }
+        .yy-btn{
+            width:.8rem;
+            height:.3rem;
+            background:#0f87f0;
+            color:white;
+            border-radius:5px;
+            font-size:.12rem;
+        }
+        .yy-bottom img{
+            width:100%;
+            height:100%;
+        }
+        .yy-as{
+            margin-top:.05rem;
+            min-height:10px;
+            height:.3rem;
+            background:#0f87f0;
+            color:white;
+            font-size:.12rem;
+            float:right;
+            border-radius:5px;
+            padding-right:.1rem;
+        }
+        .yy-as span{
+            margin-left:.1rem;
+        }
+        .ttsc1{
+            background:#0f87f0;
+            border:none;
+            float:right;
+            color:white;
+        }
+        .yy-n1{
+            float:left;
+            margin-top:0.075rem;
+            margin-left:5px;
+            height:.15rem;
+        }
+        .yy-sure{
+            margin-left:5%;
+            border:0;
+            height:.3rem;
+            margin-top:.05rem;
+            min-height:10px;
+        }
+        .sc{
+            float:right;
+            line-height:.3rem;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="yy-header">
+        <span class="yy-content1">时间:</span>
+        <select class="yy-xb" id="imagery">
+            <option value="请选择时间">请选择时间</option>
+        </select>
+        <button class="yy-btn yy-sure" id="confirm_button">确定</button>
+            <button class="yy-as" style="color:white;margin-left:.01rem;" id="download_btn">
+                <img src="{% static 'img/baogao.png' %}" class="yy-n1">
+                <span class="sc">生成报告</span>
+            </button>
+        </div>
+        <p class="canvas-title" style="width:100%;text-align:center;font-size:.2rem">资源统计信息（单位：平方公里）</p>
+        <div id="container" style="height:4.5rem"></div>
+ <script src="{% static 'js/pie_data.js' %}"></script>
+</body>
+</html>
+

@@ -1,0 +1,176 @@
+*{
+            margin:0;
+            padding:0;
+        }
+         ul li {
+		    list-style-type: none;
+	    }
+
+        .xinxikuang{
+
+            font-size:.15rem;
+            background:white;
+            width:2rem;
+            position:relative;
+            z-index:100;
+
+
+        }
+         .xinxikuang1{
+        display:block;
+            font-size:.15rem;
+            background:white;
+            width:2rem;
+            position:relative;
+            z-index:100;
+
+
+        }
+        .btn{
+            margin-left:.1rem;
+            width:.8rem;
+            height:.4rem;
+            min-width:70px;
+            min-height:30px;
+            border-radius:10%;
+            float:left;
+            border-radius:.04rem;
+            border:1px solid #d1d1d3;
+            background:white;
+            color:#717274;
+            font-size:.15rem;
+        }
+        #imagePath1{
+            display:block;
+        }
+        .xinxikuang2{
+            display:none;
+        }
+        .xinxikuang3{
+            background:white;
+        }
+        .xinxikuang4{
+            display:none;
+        }
+        #imagePath2{
+            display:none;
+        }
+        #imagePath3{
+            display:none;
+        }
+        #imagePath4{
+            display:none;
+        }
+        .yy-ul{
+        float:right
+        }
+        .tooltip-static:before {
+            border-top-color: #ffffff;
+        }
+        .form-group {
+            text-align: center;
+            text-align: center;
+            width:90%;
+            margin:0 auto 15px auto;
+        }
+        .type_select{
+            display: -webkit-flex;
+            align-items: center;
+            width:100%;
+        }
+        .input-span {
+            width:30%;
+            text-align:left;
+            margin: 0 0 0 10px;
+        }
+        .form-input,.selectpicker {
+            width:60%;
+            height:340px;
+            color: #999999;
+        }
+        .input-div{
+            width:100%;
+            display: -webkit-flex;
+            align-items: center;
+            margin-top: 10px;
+            color: #999999;
+        }
+
+        #de_map_compare a, #de_image_compare a {
+            border-radius:0.2em;
+            display:table;
+            padding:0;
+            display:-webkit-flex;
+            align-items:center;
+            height:100%;
+            outline: none;
+        }
+        .image_compare_span, .map_compare_span{
+            height: 100%;
+            display: -webkit-flex;
+            align-items: center;
+            color:#333
+        }
+         /**
+        * 提示框的样式信息
+        */
+        .tooltip {
+            position: relative;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            color: white;
+            padding: 4px 8px;
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        .tooltip-measure {
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        .tooltip-static {
+            background-color: #ffffff;
+            color: black;
+            border: 1px solid white;
+        }
+
+        .tooltip-measure:before,
+        .tooltip-static:before {
+            border-top: 6px solid rgba(0, 0, 0, 0.5);
+            border-right: 6px solid transparent;
+            border-left: 6px solid transparent;
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            margin-left: -7px;
+            left: 50%;
+        }
+
+        .tooltip-static:before {
+            border-top-color: #ffffff;
+        }
+        .xinxishang{
+            padding-bottom:.15rem;
+            float:left;
+            text-align:left;
+            background:#979de7;
+            height:.4rem;
+            padding-top:.1rem;
+            line-height:.3rem;
+            padding-left:.19rem;
+            width:100%;
+            color:white;
+           }
+        .cha{
+            float:right;
+            margin:0 .2rem .15rem 0;
+            width:.15rem;
+            height:.15rem;
+        }
+        .xinxikuang3{
+            display:none;
+            }
+        .giftu{
+            width:.2rem;
+        }

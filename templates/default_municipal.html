@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%">
+<head>
+    {% load staticfiles %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title></title>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/common.js' %}"></script>
+    <link href="{% static 'css/bootstrap.css'  %}" rel="stylesheet" >
+        <link href="{% static 'css/bootstrap-theme.css' %}"  rel="stylesheet">
+    <!--<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.1/css/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.1/css/bootstrap-theme.min.css">-->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<script src="http://code.jquery.com/jquery-latest.js"></script>-->
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+
+    <![endif]-->
+    <style type="text/css">
+        .search-type {
+            padding-left:1%;
+        }
+        .search-span {
+            padding-left:1%;
+            width:15%
+        }
+        .search-input {
+            width:100%;
+            height:56px;
+            font-size:20px;
+        }
+        .date-span {
+            color: #999999;
+            font-size: 1.8rem;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body style="height:100%">
+    <div class="homeTop" style="background-color:white; display:inline-flex; width:100%; height:10%; min-height:100px">
+        <h5 style="display:inline;width: 10%; font-size:30px; display: -webkit-flex; align-items: center; padding-left: 20px;">信息检索</h5>
+        <div role="form" name="homeForm" action="" method="post" style="width:90%; font-size:20px; height:100%">
+            <div style="width: 100%; display:-webkit-flex; align-items:center; height:100%;">
+                <span class="search-type">名称：</span>
+                <span class="search-span" ><input id="search_name" style="background: #f3f5f8;" type="text" name="name" class="form-control search-input" placeholder="请输入名称" /></span>
+                <span class="search-type">类型：</span>
+                <select id="search_type" style="background: #f3f5f8;height: 50%;border-radius: 4px;" class="search-span" style="height:56px; font-size:20px;">
+                    <option value=1>违建</option>
+                    <option value=2>拆迁</option>
+                </select>
+                <span class="search-type">时间：</span>
+                <span class="search-span"><input id="search_time" style="background: #f3f5f8;" type='date' class="form-control search-input" id='nowdate'/></span>
+                <span class="search-type">地址：</span>
+                <span class="search-span"><input id="search_address" style="background: #f3f5f8;" type="text" name="address" class="form-control search-input" placeholder="请输入地址" /></span>
+                <span class="input-group-btn search-span">
+                    <a  onclick="status()" id="btn" class="btn btn-primary" style="height:56px; width:40%; border-radius:4px; font-size: 2.5rem" href="">搜索</a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div style="height:10%; width:100%; display:-webkit-flex; align-items:center;">
+        <h5 style="width:100%; font-size:3rem; padding-left:20px; color: #444444">最新入库影像</h5>
+    </div>
+    <!--<div style="height: 100%;margin-left: 25%;">-->
+        <!--<div class="homeRight" style="float:left; width:100%; height:70%; padding-left:20px">-->
+            <!--<img id="home_pic" src="{% static 'img/homepic.png' %}" style="height:95%;">-->
+            <!--<script>-->
+                <!--document.getElementById('home_pic').onclick=function(){-->
+                    <!--location.href= '/resource_management/';-->
+                <!--};-->
+            <!--</script>-->
+        <!--</div>-->
+        <!--<div style="height:10%">-->
+            <!--<span style="font-size:2rem; padding-left:20px;">标题：2017年天津市民园广场遥感影像图</span><br/>-->
+            <!--<span class="date-span"></span>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <div id="butong_net_right" style="overflow:hidden;width:80%;height:70%;margin-left:10%">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <tr><td id="butong_net_right1" valign="top" align="center">
+            <table cellpadding="20" cellspacing="0" border="0">
+            <tr align="center">
+                <td><div>
+                    <span style="font-size: 40px;">标题：2017年天津市民园广场遥感影像图</span><br>
+                    <img src="{% static 'img/homepic.png' %}" style="width: 1000px;">
+                    <span style="width: 50px;height: 100%;"></span>
+                </div></td>
+                <td><div>
+                    <span style="font-size: 40px;">标题：2017年天津市华苑遥感影像图</span><br>
+                    <img src="{% static 'img/homepic1.png' %}" style="width: 1000px;">
+                </div></td>
+            </tr>
+            </table>
+            </td>
+            <td id="butong_net_right2" valign="top"></td>
+            </tr>
+        </table>
+    </div>
+    <script>
+    document.getElementById('butong_net_right').onclick=function(){
+        location.href= '/resource_management/';
+    };
+    var speed=30//速度数值越大速度越慢
+    butong_net_right2.innerHTML=butong_net_right1.innerHTML
+    function Marquee4(){
+        if(butong_net_right.scrollLeft<=0)
+            butong_net_right.scrollLeft+=butong_net_right2.offsetWidth
+        else{
+            butong_net_right.scrollLeft--
+        }
+    }
+    var MyMar4=setInterval(Marquee4,speed)
+    butong_net_right.onmouseover=function() {clearInterval(MyMar4)}
+    butong_net_right.onmouseout=function() {MyMar4=setInterval(Marquee4,speed)}
+
+    </script>
+    <script>
+        window.onload=function() {
+            //默认获取当前日期
+            var today = new Date();
+            var nowdate = (today.getFullYear()) + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+            //对日期格式进行处理
+            var date = new Date(nowdate);
+            var mon = date.getMonth() + 1;
+            var day = date.getDate();
+            var mydate = date.getFullYear() + "-" + (mon < 10 ? "0" + mon : mon) + "-" + (day < 10 ? "0" + day : day);
+            $("#nowdate").val(mydate);
+            $(".date-span").html(mydate);
+        }
+    </script>
+<script>
+    function status(){
+        parent.event_search_name=$("#search_name").val()
+        parent.event_search_type=$("#search_type").val()
+        parent.event_search_time=$("#search_time").val()
+        parent.event_search_address=$("#search_address").val()
+        parent.unsearched=true;
+        parent.gotosearch();
+    }
+</script>
+
+</body>
+</html>

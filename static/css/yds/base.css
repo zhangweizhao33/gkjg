@@ -1,0 +1,36 @@
+html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,form,input,em,textarea,p,th,td,span{margin:0px;padding:0px;}
+/* 去除图片底部间隙 */
+img,a img,fieldset,button,{border:none;vertical-align:middle;}
+li {list-style-type: none;}
+a {text-decoration: none;}
+
+a:link {text-decoration:none;}
+a:visited {text-decoration:none;}
+a:hover {text-decoration:underline;}
+a:active {text-decoration:none;}
+
+.clearfix:after{overflow:hidden;clear:both;display:block;height:0;content:"\20"} 
+.clearfix{*zoom:1;}
+.clear {clear:both;width:0;height:0;overflow:hidden;line-height:0;}
+.clearBoth{clear:both;}
+.fl {float:left;}
+.fr {float:right;}
+
+body{ font: 12px/1.5 '微软雅黑', '宋体', STHeiTi,Arial, Helvetica, sans-serif;}
+/*图片居中*/
+.middle:before {
+			content: "";
+			visibility: hidden;
+			display: inline-block;
+			background-color: red;
+			height: 100%;
+			vertical-align: middle;
+		}
+		
+
+/*p标签超出隐藏成小点*/
+.ell {
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
+		}

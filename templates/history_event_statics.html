@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>历史情况详查</title>
+     {% load staticfiles %}
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/yds/base.css' %}">
+    <script src="{% static 'js/yds/base.js' %}"></script>
+    <script src="{% static 'js/highcharts.js' %}"></script>
+    <script src="{% static 'js/exporting.js' %}"></script>
+    <script src="{% static 'js/export-data.js' %}"></script>
+    <style>
+        .box{
+            width:96%;
+            margin-left:2%;
+            margin-top:.2rem;
+            height:1rem;
+        }
+        a{
+            text-decoration: none;
+        }
+        .btn{
+            width:.8rem;
+            vertical-align:top;
+            height:.4rem;
+            border-radius:5px;
+            background:#0090ff;
+            color:white;
+            margin-left:.5rem;
+            font-size:.12rem;
+        }
+        .yy-time{
+            height:.4rem;
+            line-height:.4rem;
+            font-size:.15rem;
+        }
+        .sel{
+            width:1.2rem;
+            height:.4rem;
+            font-size:.12rem;
+            background:#f3f5f8;
+            border-radius:4px;
+            border:1px solid #dddddd;
+        }
+        .yy-time2{
+            margin-left:.2rem;
+        }
+        .sel2{
+            margin-left:.5rem;
+        }
+        #container{
+             display:block;
+        }
+        .container{
+              display:none;
+        }
+        .yy-as{
+            margin-top:.05rem;
+            min-height:10px;
+            height:.3rem;
+            background:#0f87f0;
+            color:white;
+            font-size:.12rem;
+            float:right;
+            border-radius:5px;
+            padding-right:.1rem;
+        }
+        .yy-n1{
+            margin-top:.075rem;
+            height:.15rem;
+            margin-left:.075rem;
+        }
+        .abc{
+            height:.3rem;
+            float:right;
+            line-height:.3rem;
+            margin-left:.1rem;
+        }
+        .yy-sure{
+            border:0;
+        }
+    </style>
+    </head>
+<body>
+        <div class="box">
+            <span class="yy-time">起始时间：</span>
+             <input type='date'  id="start_time" name="time" class="nowdate search-input"/>
+            <span class="yy-time yy-time2">终止时间：</span>
+            <input type='date'  id="end_time" name="time" class="nowdate search-input"/>
+            <select class="sel sel2">
+                <option value="全部" selected="selected">全部</option>
+                <option value="违建">违建</option>
+                <option value="疑似违建">疑似违建</option>
+                <option value="拆迁">拆迁</option>
+                <option value="疑似拆迁">疑似拆迁</option>
+            </select>
+            <button class="btn yy-sure" id="search_btn">确定</button>
+            <button class="yy-as"  id="download_btn">
+            <img src="{% static 'img/baogao.png' %}" class="yy-n1">
+                <p class="abc">生成报告</p>
+            </button>
+        </div>
+		<div id="container" class="container"></div>
+        <div id="container2" class="container"></div>
+		<div id="container3" class="container"></div>
+        <div id="container4" class="container"></div>
+		<div id="container5" class="container"></div>
+    </body>
+ <script src="{% static 'js/history_chart_data.js' %}"></script>
+<script>
+    $(".yy-sure").click(function(){
+        var select = document.getElementsByClassName("sel2")[0];
+        var value = select.value;
+        var options = select.options;
+        var value1 = options[0].value;
+        var text1 = options[0].text;
+        var index = select.selectedIndex;
+        var selectedText = options[index].text;
+        console.log(selectedText);
+        //var scbg = document.getElementById("scbg");
+        if(selectedText=="全部"){
+            $("#container").css("display","block");
+            $("#container2").css("display","none");
+            $("#container3").css("display","none");
+            $("#container4").css("display","none");
+            $("#container5").css("display","none");
+           // scbg.href="{% static 'baogao/xinxitongji.pdf' %}";
+        }
+        else if(selectedText=="违建"){
+            $("#container2").css("display","block");
+            $("#container").css("display","none");
+            $("#container3").css("display","none");
+            $("#container4").css("display","none");
+            $("#container5").css("display","none");
+           // scbg.href="{% static 'baogao/weijian.pdf' %}";
+        }
+        else if(selectedText=="疑似违建"){
+            $("#container3").css("display","block");
+            $("#container").css("display","none");
+            $("#container2").css("display","none");
+            $("#container4").css("display","none");
+            $("#container5").css("display","none");
+        }
+        else if(selectedText=="拆迁"){
+            $("#container4").css("display","block");
+            $("#container").css("display","none");
+            $("#container2").css("display","none");
+            $("#container3").css("display","none");
+            $("#container5").css("display","none");
+        }
+        else if(selectedText=="疑似拆迁"){
+            $("#container5").css("display","block");
+            $("#container").css("display","none");
+            $("#container2").css("display","none");
+            $("#container3").css("display","none");
+            $("#container4").css("display","none");
+        }
+    })
+</script>
+</html>

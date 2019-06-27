@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+     {% load staticfiles %}
+
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/openlayers_v4.5.0/build/ol.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/ol.css' %}">
+    <script src="{% static 'js/geomap.js' %}"></script>
+    <link href="{% static 'css/bootstrap.css'  %}" rel="stylesheet" >
+    <!--<link href="{% static 'css/bootstrap-theme.css' %}"  rel="stylesheet">-->
+
+    <link href="{% static 'css/yds/base.css'  %}" rel="stylesheet" >
+    <script src="{% static 'js/yds/base.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/ceshi2.css'  %}">
+</head>
+<body>
+<div style="overflow:hidden;float:right;margin-right:14%;margin-top:20px;">
+
+    <button class="btn btn1" style="min-width:100px;min-height:40px" id="btn1"><p class="w1">违建</p></button>
+
+    <button class="btn btn2" style="min-width:100px;min-height:40px" id="btn2"><p class="w2">疑似违建</p></button>
+
+    <button class="btn btn3" style="min-width:100px;min-height:40px" id="btn3"><p class="w3">拆迁</p></button>
+
+    <button class="btn btn4" style="min-width:100px;min-height:40px" id="btn4"><p class="w4">疑似拆迁</p></button>
+    <ul class="yy-ul" style="position:fixed;right:.4rem;top:.8rem;width:.5rem">
+        <li class="compare-but" id="de_map_compare" style="margin-top:10%;list-style-type:none">
+            <a id="de_map_a" href="javascript:void(0)">
+                <img src="{% static 'img/dituyingxiangtrue.png' %}"style="width:30%" class="ditu">
+                <p class="map_compare_span"style="width:50%;margin:0 0 0 10px;font-size:.12rem">地图</p>
+            </a>
+        </li>
+        <li class="compare-but" id="de_image_compare" style="margin-top:10%;list-style-type:none">
+            <a id="de_image_a" href="javascript:void(0)">
+                <img src="{% static 'img/dituyingxiangtrue.png' %}" style="width:30%" class="yingxiang">
+                <p class="image_compare_span" style="width:50%;margin:0 0 0 10px;font-size:.12rem;">影像</p>
+            </a>
+        </li>
+    </ul>
+    <br>
+    <br>
+    <br>
+    </div>
+<div class="y-left" style="">
+<div style="width:85%;margin-left:20px;">
+<div id="map" class="map"></div>
+</div>
+
+    </div>
+<div id="information_box">
+
+</div>
+
+
+
+
+
+</body>
+
+
+      <script>
+                            var map_selected = true;
+                            var image_selected = true;
+                            $("#de_map_a").click(function(){
+                                if (map_selected) {
+                                    map_selected = false;
+                                    <!--alert(111)-->
+                                    $('.ditu').attr('src',"{% static 'img/dituyingxiangfalse.png' %}");
+                                    map.removeLayer(default_geo_layer4);
+                                      if (!image_selected){
+                                        map.removeLayer(default_geo_layer);
+                                        //map.addLayer(default_geo_layer4);
+                                    }
+                                    layer3_cheak()
+                                } else {
+                                    $('.ditu').attr('src',"{% static 'img/dituyingxiangtrue.png' %}");
+                                    map_selected = true;
+                                    map.addLayer(default_geo_layer4);
+                                    layer3_cheak()
+                                }
+                            })
+
+                            $("#de_image_a").click(function(){
+                                if (image_selected) {
+                                    $('.yingxiang').attr('src',"{% static 'img/dituyingxiangfalse.png' %}")
+                                    image_selected = false;
+                                    map.removeLayer(default_geo_layer2);
+                                    layer3_cheak()
+                                } else {
+                                    $('.yingxiang').attr('src',"{% static 'img/dituyingxiangtrue.png' %}")
+                                    image_selected = true;
+                                    map.addLayer(default_geo_layer2);
+                                    if (map_selected){
+                                        map.removeLayer(default_geo_layer4);
+                                        map.addLayer(default_geo_layer4);
+                                    }
+                                    layer3_cheak()
+                                }
+                            })
+                            function layer3_cheak(){
+                                if (map_selected && !image_selected){
+
+                                    map.removeLayer(default_geo_layer2);
+                                    map.addLayer(default_geo_layer3);
+                                    map.removeLayer(default_geo_layer);
+                                    map.addLayer(default_geo_layer);
+                                    map.removeLayer(default_geo_layer4);
+                                    //map.addLayer(default_geo_layer4);
+                                    //alert("qew");
+                                    }
+                                else
+                                    map.removeLayer(default_geo_layer3);
+                                    //map.removeLayer(default_geo_layer);
+                            };
+                        </script>
+
+<script>
+    var map = new ol.Map({
+       target: 'map',
+       view: new ol.View({
+         center: ol.proj.fromLonLat([117.2027, 39.1653]),
+         zoom: 12,
+         maxZoom:18,
+         minZoom:4
+       }),
+       controls: ol.control.defaults().extend([
+            new ol.control.ScaleLine({  }),
+            new ol.control.MousePosition({
+                coordinateFormat: ol.coordinate.createStringXY(4),
+                projection: 'EPSG:4326',
+
+            }),
+            new ol.control.ScaleLine({  }),
+            new ol.control.FullScreen(),
+            new ol.control.ZoomSlider({
+                maxResolution:1000,
+                minResolution:1000
+            })
+      ]),
+
+     });
+
+        map.addLayer(default_geo_layer2);
+        map.addLayer(default_geo_layer4);
+        var fullScreen=new ol.control.FullScreen();//openlayer 3 仅支持IE最新版本（IE 11+）
+        map.addControl(fullScreen);
+
+
+
+
+</script>
+<script src="{% static 'js/interesting_area.js' %}"></script>
+<script>
+
+    var btn1 = document.getElementsByClassName('btn1')[0];
+    var bol1 = false;
+    var w1 = document.getElementsByClassName('w1')[0];
+    $(".btn1").click(function(){
+        bol1=!bol1;
+        btn1.style.background=bol1?"#0090ff":"#f4f5f9";
+        w1.style.color=bol1? "white":"#717274";
+    })
+
+    var btn2 = document.getElementsByClassName('btn2')[0];
+    var bol2 = false;
+    var w2 =document.getElementsByClassName('w2')[0];
+    $(".btn2").click(function(){
+        bol2=!bol2;
+        btn2.style.background=bol2?"#0090ff":"#f4f5f9";
+        w2.style.color=bol2? "white":"#717274";
+
+    })
+
+
+    var bol3 = false;
+    var btn3 = document.getElementsByClassName('btn3')[0];
+    var w3 = document.getElementsByClassName('w3')[0];
+    $(".btn3").click(function(){
+        bol3=!bol3;
+        btn3.style.background=bol3?"#0090ff":"#f4f5f9";
+        w3.style.color=bol3? "white":"#717274";
+
+    })
+
+
+    var bol4 = false;
+    var btn4 = document.getElementsByClassName('btn4')[0];
+    var w4 = document.getElementsByClassName('w4')[0];
+    $(".btn4").click(function(){
+        bol4=!bol4;
+
+        btn4.style.background=bol4?"#0090ff":"#f4f5f9";
+        w4.style.color=bol4? "white":"#717274";
+
+    })
+
+
+
+</script>
+
+
+</html>

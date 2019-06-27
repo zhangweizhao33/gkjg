@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+     {% load staticfiles %}
+    <title>地图卷帘效果</title>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/ol.css' %}">
+    <link href="{% static 'css/bootstrap.css'  %}" rel="stylesheet" >
+    <link href="{% static 'css/bootstrap-theme.css' %}"  rel="stylesheet">
+    <script src="{% static 'js/openlayers_v4.5.0/build/ol.js' %}"></script>
+    <!--[if lt IE 9]>
+    <script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script>
+    <![endif]-->
+
+    <!--<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>-->
+    <!--<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>-->
+    <script src="{% static 'js/common.js' %}"></script>
+     <script >
+         $.ajaxSetup({
+             data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+         });
+    </script>
+    <!--<script src="{% static 'js/html2canvas.min.js' %}"></script>-->
+    <!--<script src="{% static 'js/canvas2image.js' %}"></script>-->
+    <link rel="stylesheet" href="{% static 'css/yds/base.css' %}">
+    <script src="{% static 'js/yds/base.js' %}"></script>
+    <style>
+        body{
+            overflow: hidden;
+        }
+        html,body,.map{
+            width: 100%;
+            height: 100%;
+            position:absolute;
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+        .map {
+            overflow-y:auto;
+        }
+
+        .tooltip-static:before {
+            border-top-color: #ffffff;
+        }
+        .form-group {
+            text-align: center;
+            text-align: center;
+            width:90%;
+            margin:0 auto 15px auto;
+        }
+        .type_select{
+            display: -webkit-flex;
+            align-items: center;
+            width:100%;
+        }
+        .input-span {
+            width:30%;
+            text-align:left;
+            margin: 0 0 0 10px;
+        }
+        .form-input,.selectpicker {
+            width:60%;
+            height:34px;
+            color: #999999;
+        }
+        .input-div{
+            width:100%;
+            display: -webkit-flex;
+            align-items: center;
+            margin-top: 10px;
+            color: #999999;
+        }
+
+        #ib_map_compare a, #ib_image_compare a {
+            display:table;
+            padding:0;
+            display:-webkit-flex;
+            align-items:center;
+            height:100%;
+            outline: none;
+        }
+        .image_compare_span, .map_compare_span{
+            height: 100%;
+            display: -webkit-flex;
+            align-items: center;
+            color:#333
+        }
+         /**
+        * 提示框的样式信息
+        */
+        .tooltip {
+            position: relative;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            color: white;
+            padding: 4px 8px;
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        .tooltip-measure {
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        .tooltip-static {
+            background-color: #ffffff;
+            color: black;
+            border: 1px solid white;
+        }
+
+        .tooltip-measure:before,
+        .tooltip-static:before {
+            border-top: 6px solid rgba(0, 0, 0, 0.5);
+            border-right: 6px solid transparent;
+            border-left: 6px solid transparent;
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            margin-left: -7px;
+            left: 50%;
+        }
+
+        .tooltip-static:before {
+            border-top-color: #ffffff;
+        }
+        .w{
+            width:.8rem;
+            height:.4rem;
+            border-radius:.04rem;
+            line-height:.4rem;
+            border: 1px solid #d1d1d3;
+    background: white;
+    color: #717274;
+    font-size: .15rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="compare container" style="background-color:white; display:inline-flex; width:100%; height:10%; min-height:100px">
+        {% csrf_token %}
+        <div class="row" style="width: 100%; display:-webkit-flex; align-items:center; height:100%;font-size: 20px;">
+            <!--<div id="xyz" class="col-lg-5 col-xs-5" style="display:inline-flex; align-items:center; height:100%;padding-left: 5%;">-->
+                <!--<span class="picture-span">经度：</span>-->
+                <!--<input type="text" class="compare-input" id="lontitude">-->
+                <!--<span class="picture-span" style="padding-left: 5%;">纬度：</span>-->
+                <!--<input type="text" class="compare-input" id="lantitude">-->
+                <!--<span style="height:100%; display:-webkit-flex; align-items:center; margin-left:10px;">-->
+                    <!--<button class="btn btn-primary" style="border-radius:6px; height:34px; width:100%; font-size:14px" id="location_btn" >查询</button>-->
+                <!--</span>-->
+                <!--<script>-->
+                    <!--$("#location_btn").click(function (){-->
+                    <!--var lontitude=$("#lontitude").val();-->
+                    <!--var lantitude=$("#lantitude").val()*1.0;-->
+                     <!--var location=ol.proj.fromLonLat([lontitude,lantitude]);-->
+                     <!--//map.getView().setCenter(location);-->
+                     <!--map.getView().animate({zoom:map.getView().getZoom()-1},{center:location},{zoom:map.getView().getZoom()+1},{duration:3000});-->
+                    <!--});-->
+                <!--</script>-->
+            <!--</div>-->
+            <div class="col-lg-8 col-xs-8" style="display:inline-flex; align-items:center; height:100%;padding-left: 2%;">
+                <span class="picture-span" style="font-size:.15rem">参考影像：</span>
+                <span class="picture-date" style="width: 20%;">
+                    <select  id="compare1" class="form-control compare-input" style="font-size:.15rem;height:.4rem;line-height:.4rem">
+                        <option >请选择影像</option>
+                    </select>
+                </span>
+                <span class="picture-span" style="font-size:.15rem;margin-left:.2rem;">对比影像：</span>
+                <span class="picture-date" style="width: 20%;">
+                    <select  id="compare2" class="form-control compare-input" style="font-size:.15rem;height:.4rem;line-height:.4rem;">
+                        <option>请选择影像</option>
+                    </select>
+                </span>
+                <span style="height:100%; display:-webkit-flex; align-items:center; margin-left:10px;">
+                    <button style="border-radius:.06rem;padding-left: 5%;width:1rem;height:.4rem;font-size:.15rem" class="btn btn-primary compare-but" id="button_compare">
+                            <img src="{% static 'img/contrast.png' %}" style="height:60%; margin-right:8px; margin-bottom:3px;">
+                            <span id="compare_span">开始对比</span>
+                    </button>
+                </span>
+
+
+            </div>
+            <div style="overflow:hidden;float:right;">
+                <button  id="btn1" class="w1 w">拆迁</button>
+                <button  id="btn2" class="w2 w">疑似拆迁</button>
+            </div>
+            <!--<div class="col-lg-5 col-xs-5" style="display:inline-flex; align-items:center; height:100%;padding-left: 5%;">-->
+                 <!--<span class="picture-span">地址：</span>-->
+                <!--<input type="text" name="location" id="location">-->
+                <!--<button id="locate" >定位</button>-->
+            <!--</div>-->
+        </div>
+    </div>
+    <div class="container" style="width:100%; height:87%">
+        <div class="row" id="image" style="width:100%; height:100%">
+            <div class="col-lg-11 col-xs-11" style="height:100%">
+                <div id="map" class="map" ></div>
+                <div id="map_2" class="map " style="display:none"></div>
+                <div id="popup" class="ol-popup" style=" display:none">
+                    <div id="popup-content" style="width:300px;">
+                        <div role="form" name="indexForm"  style="background-color:white; text-align:center;  border-radius:6px;">
+                            {% csrf_token %}
+                             <h5 style="font-size:18px; height:30px; line-height:30px;">请输入违建或拆迁信息</h5>
+                             <div class="input-div">
+                                    <p class="input-span">名称：</p>
+                                    <input id="name" type="text" class="form-input" placeholder="请输入名称"/>
+                             </div>
+                             <div class="input-div">
+                                  <p clss="type_select">
+                                      <p class="input-span">地上物类型：</p>
+                                      <select id="graphictype" class="selectpicker">
+                                          <option>建筑</option>
+                                          <option>道路</option>
+                                          <option>水域</option>
+                                          <option>草地</option>
+                                          <option>林地</option>
+                                          <option>耕地</option>
+                                          <option>大棚</option>
+                                          <option>其他</option>
+                                      </select>
+                                  </p>
+                             </div>
+                            <div class="input-div">
+                                <p clss="type_select">
+                                    <p class="input-span">类型：</p>
+                                    <select id="graphiclabel" class="selectpicker">
+                                        <option>拆迁</option>
+                                        <option>疑似拆迁</option>
+                                    </select>
+                                </p>
+                            </div>
+                            <div class="input-div">
+                                <p class="input-span">描述：</p>
+                                <input id="discrib"  type="text" class="form-input"  placeholder="请输入描述信息" />
+                            </div>
+                            <div class="input-div">
+                                <p class="input-span">面积：</p>
+                                <input id="square"  class="form-input"  placeholder="请输入面积" />
+                            </div>
+                            <div class="input-div">
+                                <p class="input-span">录入时间：</p>
+                                <input type="date" id="foundtime" style="width: 60%;" class="form-control compare-input"/>
+                            </div>
+                            <div class="input-div">
+                                <p class="input-span">现场地址：</p>
+                                <input id="graphicaddress"  class="form-input"  placeholder="请输入现场地址" />
+                            </div>
+                            <div style="text-align: center; padding-bottom:10px;display: -webkit-flex;align-items: center;">
+                                    <div style="width: 50%;text-align: left;margin-left: 65px;">
+                                        <button id="save_submit" class="btn btn-primary" style="width: 70px;background: #0090ff;">保存</button>
+                                    </div>
+                                <div style="width: 50%;text-align: left;margin-left: 65px;">
+                                        <button id="save_update" class="btn btn-primary" style="width: 70px;background: #0090ff;">更改</button>
+                                    </div>
+                                    <div style="width: 50%;text-align: left;margin-right: 65px;">
+                                        <button id="save_cancel" class="btn btn-primary" style="width: 70px;background: #0090ff;">取消</button>
+                                    </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="popup_info" style="background-color:white;border-radius:5px;width: 150%;display:none;">
+                    <p><b>面积&#8195</b><font id="popup_info_square">000</font></p>
+                    <span style="float:right;  padding-right:10px;"><img id="close_login" src="{% static 'img/close.png' %}"></span>
+                    <p><b>类型&#8195</b><font id="popup_info_type">000</font></p>
+                    <p><b>位置&#8195</b><font id="popup_info_address">000</font></p>
+                    <p><b>时间&#8195</b><font id="popup_info_time">000</font></p>
+
+                </div>
+                <div id="popup_button"></div>
+            </div>
+            <div class="col-lg-1 col-xs-1" style="height:100%; text-align:center; font-size:20px;">
+                <div style="height:100%; width:100%; margin-left:20px;">
+                    <div class="img_download" style="width:100%; height:50%; color:#0090ff">
+                    <!--<ul class="map_image_compare" style="white-space: nowrap;">-->
+                        <li class="compare-but" id="ib_map_compare" style="list-style-type:none">
+                            <a id="ib_map_a" href="javascript:void(0)">
+                                <img src="{% static 'img/dituyingxiangtrue.png' %}" style="width:20%;" class="ditu">
+                                <p class="map_compare_span" style="margin:0 0 0 20px;">地图</p>
+                            </a>
+                        </li>
+                        <li class="compare-but" id="ib_image_compare" style="margin-top:10%;list-style-type:none">
+                            <a id="ib_image_a" href="javascript:void(0)">
+                                <img src="{% static 'img/dituyingxiangtrue.png' %}" style="width:20%;" class="yingxiang">
+                                <p class="image_compare_span" style="margin:0 0 0 20px;">影像</p>
+                            </a>
+                        </li>
+                        <script>
+                            var map_selected = true;
+                            var image_selected = true;
+                            $("#ib_map_compare").click(function(){
+                                if (map_selected) {
+                                    $('.ditu').attr('src',"{% static 'img/dituyingxiangfalse.png' %}");
+                                    map_selected = false;
+                                    map.removeLayer(default_geo_layer4);
+                                      if (!image_selected){
+                                        map.removeLayer(default_geo_layer);
+                                        //map.addLayer(default_geo_layer4);
+                                    }
+                                    layer3_cheak()
+                                } else {
+                                    $('.ditu').attr('src',"{% static 'img/dituyingxiangtrue.png' %}");
+                                    map_selected = true;
+                                    map.addLayer(default_geo_layer4);
+                                    layer3_cheak()
+                                }
+                            })
+
+                            $("#ib_image_compare").click(function(){
+                                if (image_selected) {
+                                    $('.yingxiang').attr('src',"{% static 'img/dituyingxiangfalse.png' %}");
+                                    image_selected = false;
+                                    map.removeLayer(default_geo_layer2);
+                                    layer3_cheak()
+                                } else {
+                                    $('.yingxiang').attr('src',"{% static 'img/dituyingxiangtrue.png' %}");
+                                    image_selected = true;
+                                    map.addLayer(default_geo_layer2);
+                                    if (map_selected){
+                                        map.removeLayer(default_geo_layer4);
+                                        map.addLayer(default_geo_layer4);
+                                    }
+                                    layer3_cheak()
+                                }
+                            })
+                            function layer3_cheak(){
+                                if (map_selected && !image_selected){
+
+                                    map.removeLayer(default_geo_layer2);
+                                    map.addLayer(default_geo_layer3);
+                                    map.removeLayer(default_geo_layer);
+                                    map.addLayer(default_geo_layer);
+                                    map.removeLayer(default_geo_layer4);
+                                    //map.addLayer(default_geo_layer4);
+                                    //alert("qew");
+                                    }
+                                else
+                                    map.removeLayer(default_geo_layer3);
+                                    //map.removeLayer(default_geo_layer);
+                            };
+                        </script>
+
+                    </ul>
+                    <a class="down" id="image_download" onmouseout="restore1()" onmouseover="change1()"> <div  style="margin-top:150%"><img id="img1" style="width:50%;" src="{% static 'img/image_download.png' %}"></div>
+                       <div  id="image_download1" style="color:#999999">影像下载</div>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"></script>
+                        <script>
+                        //下载影像图片
+                            download_button=$("#image_download");
+                            download_button.click(download);
+                            function download(){
+                                map.once('postcompose', function(event) {
+                                  var canvas = event.context.canvas;
+                                  if (navigator.msSaveBlob) {
+                                    navigator.msSaveBlob(canvas.msToBlob(), 'map.png');
+                                  } else {
+                                    canvas.toBlob(function(blob) {
+                                      saveAs(blob, 'map.png');
+                                    });
+                                  }
+                                });
+                                map.renderSync();
+                            }
+                        </script>
+                    </a>
+                    <a>
+                    <div style="margin-top:52px; cursor:pointer;" id="ib_plotting" >
+                        <div><img id="img2" style="width:50%" src="{% static 'img/measure.png' %}"></div>
+                        <div id ="plotting_id" style="color:#999999">量标</div>
+
+                         <script>
+                            var clicked=false;
+                            $("#ib_plotting").bind("mouseenter",change2);
+                            $("#ib_plotting").bind("mouseleave",restore2);
+                            $("#ib_plotting").click(function(){
+                                if (clicked) {
+                                    var path1="{% static 'img/measure.png' %}";
+                                    $("#plotting_menu").css("display","none");
+                                    $("#plotting_id").html("标量");
+                                    $("#img2").attr("src",path1);
+                                    $("#plotting_id").css("color","#999999");
+                                     $("#ib_plotting").bind("mouseenter",change2);
+                                     $("#ib_plotting").bind("mouseleave",restore2);
+                                    clicked=false;
+                                }else{
+                                    var path2="{% static 'img/measure11.png' %}"
+                                    $("#plotting_menu").css("display","inline");
+                                    $("#plotting_id").html("取消标量");
+                                    $("#plotting_id").css("color","#0090ff");
+                                    $("#ib_plotting").unbind("mouseenter");
+                                     $("#ib_plotting").unbind("mouseleave");
+                                     $("#img2").attr("src",path2);
+                                    clicked=true;
+                                }
+                                });
+function change1(){
+        document.getElementById('img1').src="{% static 'img/view_download.png' %}";
+        $("#image_download1").css("color","#0090ff")
+    }
+    function restore1(){
+        document.getElementById('img1').src="{% static 'img/image_download.png' %}";
+        $("#image_download1").css("color","#999999")
+    }
+    function change2(){
+        document.getElementById('img2').src="{% static 'img/measure11.png' %}";
+        $("#plotting_id").css("color","#0090ff")
+    }
+    function restore2(){
+        document.getElementById('img2').src="{% static 'img/measure.png' %}";
+         $("#plotting_id").css("color","#999999")
+    }
+
+                         </script>
+
+                    </div>
+                    </a>
+                    <div id =plotting_menu style="display:none">
+                       <button id='draw_button_div' class="btn btn-primary function-but">标绘</button><br/>
+                       <button id='distance_button_div' class="btn btn-primary function-but">测距</button><br/>
+                       <button id='area_button_div' class="btn btn-primary function-but">测面积</button><br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="{% static 'js/geomap.js' %}"></script>
+    <script type="text/javascript">
+     var map = new ol.Map({
+       target: 'map',
+       view: new ol.View({
+         center: ol.proj.fromLonLat([117.2027, 39.1653]),
+         zoom: 12,
+         maxZoom:18,
+         minZoom:4
+       }),
+       controls: ol.control.defaults().extend([
+            new ol.control.ScaleLine({  }),
+            new ol.control.MousePosition({
+                coordinateFormat: ol.coordinate.createStringXY(4),
+                projection: 'EPSG:4326'
+            }),
+            new ol.control.ScaleLine({  }),
+            new ol.control.FullScreen(),
+            new ol.control.ZoomSlider({
+                maxResolution:1000,
+                minResolution:1000
+            })
+      ]),
+     });
+
+
+    map.addLayer(default_geo_layer2);
+    map.addLayer(default_geo_layer4);
+    map.render();
+    var map_2 = new ol.Map({
+        target:"map_2",
+        view:map.getView(),
+        //layers:[ new ol.layer.Tile({source:new ol.source.OSM()}) ]
+    });
+
+    </script>
+
+
+
+    <script src="{% static 'js/load_demolition_draw.js' %}"></script>
+    <script src="{% static 'js/roller_shutters.js' %}"></script>
+    <script src="{% static 'js/select_draw.js' %}"></script>
+    <script src="{% static 'js/polygon1.js' %}"></script>
+    <script src="{% static 'js/distance.js' %}"></script>
+    <script src="{% static 'js/area.js' %}"></script>
+
+    </div>
+</body>
+ <script>
+          cords=[{{x|safe}},{{y|safe}}];//cords=[102,39]
+          var num={{num|safe}};
+         if(cords.toString()!=[0,0].toString())
+           map.getView().animate({zoom: map.getView().getZoom() + num},{center:(cords)});
+        // var type={{type|safe}};
+         //console.log(type);
+         //if(type=="违建"){
+
+         //$("#btn1")[0].click();
+
+         //}else if(type=="疑似违建"){
+
+         //$("#btn2")[0].click();
+
+         //}
+
+
+
+
+    </script>
+</html>

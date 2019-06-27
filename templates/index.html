@@ -1,0 +1,455 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml" style="height:100%">
+<head>
+    {% load staticfiles %}
+
+    <link REL="SHORTCUT ICON" HREF="{% static 'img/favicon.ico' %}"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="Keywords" content="天津未来科技城卫星遥感资源管理系统"/>
+    <title>智能遥感管理系统</title>
+
+    <!-- BOOTSTRAP STYLES-->
+    <link href="{% static 'css/bootstrap.css'  %}" rel="stylesheet" />
+    <!-- FONTAWESOME STYLES-->
+    <link href="{% static 'css/font-awesome.css'  %}" rel="stylesheet" />
+       <!--CUSTOM BASIC STYLES-->
+    <link href="{% static 'css/basic.css' %}" rel="stylesheet" />
+    <!--CUSTOM MAIN STYLES-->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
+    <!-- GOOGLE FONTS-->
+    <!--<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />-->
+
+    <!-- JQUERY SCRIPTS -->
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <!--<script src="{% static 'js/jquery-1.10.2.js' %}"></script>-->
+    <!-- BOOTSTRAP SCRIPTS -->
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <!-- METISMENU SCRIPTS -->
+    <script src="{% static 'js/jquery.metisMenu.js' %}"></script>
+       <!-- CUSTOM SCRIPTS -->
+    <script src="{% static 'js/custom.js' %}"></script>
+    <script src="{% static 'js/common.js' %}"></script>
+
+    <style type="text/css">
+    html,body{
+        width:100%;
+        height:100%;
+        overflow:hidden;
+    }
+        #container{
+	        background:#0a86e1;
+	        text-align:center;
+	        height:20%;
+        }
+        #page-wrapper {
+            height:80%;
+        }
+        .head-ul {
+            border-bottom: 0px;
+        }
+        .head-ul li {
+            width:16%;
+            height:100%;
+        }
+        .nav-tabs li a:focus {
+            background: -webkit-linear-gradient(#359ae4, #0c17f3);
+            background: -o-linear-gradient(#359ae4, #0c17f3);
+            background: -moz-linear-gradient(#359ae4, #0c17f3);
+            background: linear-gradient(#359ae4, #0c17f3);
+            outline:none;
+            border:none;
+        }
+        .nav-tabs li a:hover {
+            background: -webkit-linear-gradient(#359ae4, #0c17f3);
+            background: -o-linear-gradient(#359ae4, #0c17f3);
+            background: -moz-linear-gradient(#359ae4, #0c17f3);
+            background: linear-gradient(#359ae4, #0c17f3);
+            border:none;
+        }
+        .nav-tabs li a{
+            margin:0;
+            color:white;
+            font-size:2.5rem;
+            height:100%
+        }
+        .view-button {
+            margin-left:15px;
+        }
+        .nav-img-p{
+            height:70%;
+            display:-webkit-flex;
+            align-items:center;
+            margin:0;
+            transform: scale(1.5);
+            width:100px;
+        }
+        .nav-img{
+           margin-right:30px;
+        }
+        .nav-text-p{
+            height:30%;
+            margin: 0;
+        }
+        .nav-container{
+            padding: 0;
+        }
+        #login, #logout{
+            color: #fff;
+            padding-left:10px;
+        }
+        #login_page {
+            position:absolute;
+            z-index:10000;
+            width:370px;
+            float:left;
+            height:400px;
+            display:none;
+            background:#fff;
+            border:2px solid #DCDCF3;
+            border-radius:10px;
+        }
+        .input-group-addon,.username_input,.password_input {
+            height:35px;
+        }
+        .username_input,.password_input {
+            border-radius: 0 20px 20px 0;
+        }
+        .input-group-addon {
+            border-radius: 20px 0 0 20px;
+        }
+        #message {
+            margin-top: 10px;
+            color: #f51b0b;
+        }
+        .nav-text-p{
+            width:140px;
+            text-align:center;
+            margin-right:200px;
+        }
+        .nav-img-p{
+            margin-left:20px;
+        }
+    </style>
+    <script>
+        function service(){
+        alert("请联系服务商 022-84478484");
+        }
+    </script>
+</head>
+
+<body style="height:100%;">
+    <div id="login_page">
+        <div>
+            <span style="float:right; padding-top:14px; padding-right:14px;"><img id="close_login" src="{% static 'img/close.png' %}"></span>
+        </div>
+        <div style="text-align:center; padding-top:40px; font-size:2.5rem; color:#428bca;">
+            <span>智能遥感资源管理系统</span>
+        </div>
+        <div class="panel-body">
+            <!--form模块-->
+            <div>
+                {% csrf_token %}
+                <hr/>
+                <h4>请输入用户信息</h4>
+                <br/>
+                <div class="form-group input-group">
+                    <span class="input-group-addon username-group-span"><img id="username_img" src="{% static 'img/user.png' %}"></span>
+                    <input type="text" name="username" id="user_input" class="form-control username_input username-group" placeholder="用户名 " />
+                </div>
+                <div class="form-group input-group">
+                    <span class="input-group-addon password-group"><img id="password_img" src="{% static 'img/pwswd.png' %}"></span>
+                    <input type="password" name="password" id="pwd_input" class="form-control password_input password-group"  placeholder="密码" />
+                </div>
+                <div class="form-group">
+                    <span>不是用户<a onclick="service()" >点击这里 </a></span>
+                    <span style="float:right;"><a style="color:#999999" onclick="service()">忘记密码？</a></span>
+                </div>
+                <div class="subBut" style="text-align:center;"><button id="login_but" class="btn btn-primary" style="width:50%;border-radius:30px;">登录系统</button></div>
+            </div>
+            <p id="message"></p>
+        </div>
+    </div>
+    <div id="wrapper" style="height:100%">
+        <div id="container" style="height:20%; min-height:200px">
+            <div style="width:100%; display:inline-flex; height:100%;">
+                <div style="width:40%; padding-left: 20px;" href="javascript:void(0)" onclick="open_link('/home_municipal/');">
+                    <p style="width:100%; height:100%; display:-webkit-flex; align-items:center">
+                        <img style="height:50%;margin-left: 2%;cursor:pointer;" src="{% static 'img/spaceflight.png' %}">
+                        <span style="font-size:5rem;margin-left: 3%;color:white;cursor:pointer;">智能遥感资源管理系统</span>
+
+                    </p>
+                </div>
+                <div style="width:60%; height:100%">
+                    <div style="width:100%; display:inline-flex; height:30%;">
+                        <span style="width:30%; margin-left:80%; height:100%; font-size:16px; display:inline-flex">
+                            <img style=" color:white;height:50%;transform: scale(1.2);align-self: center;" src="{% static 'img/user_logo.png' %}">
+                            <a id="login" title="Login" style="align-self: center;color:white"><em class="glyphicon glyphicon-plus"></em>登录</a>
+                            <span id="user_name" style="padding-left:10px;align-self: center;color:white"></span>
+                            <a id="logout" href="/logout/" class="" style="display:none;align-self: center;" title="Logout"><em class="glyphicon glyphicon-home"></em>退出</a>
+                        </span>
+                        <!--<p style="width:20%; margin-right: 0;align-self: center;">-->
+                            <!--<span class="view-button"><img src="{% static 'img/q.png' %}"></span>-->
+                            <!--<span class="view-button"><img src="{% static 'img/w.png' %}"></span>-->
+                            <!--<span onclick="closeWindow()" class="view-button"><img src="{% static 'img/e.png' %}"></span>-->
+                        <!--</p>-->
+                    </div>
+                    <div style="width:100%; height:70%;margin-left:200px;">
+                    <!--<nav class="collapse navbar-collapse" style="padding-left:10px">-->
+                        <ul class="nav nav-tabs head-ul" style="height:100%;margin-left:300px;">
+                            <li role="presentation">
+                                <a id="1" class="nav-container" href="javascript:void(0)" onclick="open_link('/home_municipal/');" >
+                                    <p class="nav-img-p"><img class="nav-img img-responsive center-block" src="{% static 'img/municipal.png' %}"></p>
+                                    <p class="nav-text-p">市政管理&nbsp;&nbsp;&nbsp;</p>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a id="2" class="nav-container" href="javascript:void(0)" onclick="open_link('/developing/');">
+                                    <p class="nav-img-p"><img class="nav-img img-responsive center-block" src="{% static 'img/agriculture.png' %}"></p>
+                                    <p class="nav-text-p">感兴趣区域&nbsp;&nbsp;</p>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a id="4" class="nav-container" href="javascript:void(0)" onclick="open_link('/account_management/');">
+                                    <p class="nav-img-p"><img class="nav-img img-responsive center-block" src="{% static 'img/user_ statistics .png' %}"></p>
+                                    <p class="nav-text-p">权限管理&nbsp;&nbsp;&nbsp;</p>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a id="3" class="nav-container" href="javascript:void(0)" onclick="open_link('/user_center/');">
+                                    <p class="nav-img-p"><img class="nav-img img-responsive center-block" src="{% static 'img/setting.png' %}"></p>
+                                    <p class="nav-text-p">系统设置&nbsp;&nbsp;&nbsp;</p>
+                                </a>
+                            </li>
+                        </ul>
+                        <!--</nav>-->
+                    </div>
+                </div>
+                <!--</nav>-->
+            </div>
+	    </div>
+
+        <style>
+            html,body,#map{
+            padding:0;
+            margin:0;
+            height:0;
+            }
+        </style>
+        <div id="page-wrapper">
+            <div style="height:100%">
+                <iframe name="ascent" id="context_container" src="/home_municipal/" frameborder="0" scrolling="no" style="width: 100%; height: 100%;">
+                </iframe>
+            </div>
+        </div>
+        <!-- /. PAGE WRAPPER  -->
+    </div>
+    <!-- /. WRAPPER  -->
+    <script >
+      $.ajaxSetup({
+         data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+      });
+    </script>
+        <script>
+    var css_selected={
+            //background: "-webkit-linear-gradient(#359ae4, #0c17f3)",
+            //background: "-o-linear-gradient(#359ae4, #0c17f3)",
+            //background: "-moz-linear-gradient(#359ae4, #0c17f3)",
+            background: "linear-gradient(#359ae4, #0c17f3)",
+            outline:"none",
+            border:"none"
+            };
+    var css_unselected={
+            background: "#0a86e1",
+            outline:"none",
+            border:"none"
+            };
+
+    var lis=[$("#1"),$("#2"),$("#3"),$("#4"),$("#5"),$("#6")];
+    //lis[0].css(css_selected);
+    lis[0].css(css_selected)
+    lis[0].click(function(){
+
+        for(var i=0;i<6;i++)
+            {
+            lis[i].css(css_unselected);
+
+            }
+        lis[0].css(css_selected);
+
+    });
+    lis[1].click(function(){
+
+        for(var i=0;i<6;i++)
+            {
+            lis[i].css(css_unselected);
+
+            }
+        lis[1].css(css_selected);
+
+    });
+    lis[2].click(function(){
+
+        for(var i=0;i<6;i++)
+        {
+            lis[i].css(css_unselected);
+
+             }
+        lis[2].css(css_selected);
+
+    });
+    lis[3].click(function(){
+
+        for(var i=0;i<6;i++)
+           { lis[i].css(css_unselected);
+            }
+        lis[3].css(css_selected);
+
+    });
+    lis[4].click(function(){
+
+        for(var i=0;i<6;i++)
+           { lis[i].css(css_unselected);
+         }
+        lis[4].css(css_selected);
+
+    });
+    lis[5].click(function(){
+
+        for(var i=0;i<6;i++)
+           { lis[i].css(css_unselected);
+            }
+        lis[5].css(css_selected);
+
+    });
+    </script><!-- 选中状态切换  -->
+    <script>
+
+    window.onload=function(){
+
+        //默认获取当前日期
+        var today = new Date();
+        var nowdate = (today.getFullYear()) + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+        //对日期格式进行处理
+        var date = new Date(nowdate);
+        var mon = date.getMonth() + 1;
+        var day = date.getDate();
+        var mydate = date.getFullYear() + "-" + (mon < 10 ? "0" + mon : mon) + "-" + (day < 10 ? "0" + day : day);
+        $("#nowdate").val(mydate);
+        $(".date-span").html(mydate);
+
+        $.ajax({
+                type:'POST',
+                url:'/is_authenticated/',
+                dataType:'json',
+                success:function(data){
+                    if(data['islogin']){
+                        $("#login_page").hide();
+                        $("#login").hide();
+                        $("#user_name").show();
+                        $("#user_name").text(data['username']);
+                        $("#logout").show();
+                        $("#message").text('');
+                    }
+                }
+                });
+    };
+
+        $("#login").click(function(){
+            var _top=($(window).height())/10;
+            var _right=($(window).width())/7;
+            $("#login_page").css({top:_top,right:_right});
+            $("#login_page").show();
+            $("#message").text('');
+        });
+
+        $("#close_login").click(function(){
+            $("#login_page").hide();
+        });
+
+        $("#user_input").focus(function (){
+            $("#username_img").attr("src","{% static 'img/username.png' %}");
+        });
+        $("#user_input").blur(function (){
+            $("#username_img").attr("src","{% static 'img/user.png' %}");
+        });
+
+        $("#pwd_input").focus(function (){
+            $("#password_img").attr("src","{% static 'img/password.png' %}");
+        });
+        $("#pwd_input").blur(function (){
+            $("#password_img").attr("src","{% static 'img/pwswd.png' %}");
+        });
+
+        $("#login_but").click(function(){
+            var username = $("#user_input").val();
+            var password = $("#pwd_input").val();
+            $.ajax({
+                type:'POST',
+                url:'/login_check/',
+                data:{
+                    'username':username,
+                    'password':password
+                },
+                dataType:'json',
+                success:function(data){
+                    if(data['status']){
+                        $("#login_page").hide();
+                        $("#login").hide();
+                        $("#user_name").show();
+                        $("#user_name").text(data.username);
+                        $("#logout").show();
+                        $("#message").text('');
+                        //open_link('/home_municipal/');
+                        //document.getElementById("context_container").contentWindow.getElementById("municipal_container").src="/offence_build/";
+                         var lis1=[window.frames["ascent"].document.getElementById("1"),
+                         window.frames["ascent"].document.getElementById("2"),
+                         window.frames["ascent"].document.getElementById("3"),
+                         window.frames["ascent"].document.getElementById("4"),
+                         window.frames["ascent"].document.getElementById("5"),
+                         window.frames["ascent"].document.getElementById("6")];
+                         var lis_url=["/offence_build/",'/move_out/','/resource_management/','/general_survey/','/account_management/','/user_center/'];
+
+                         for(var i=0;i<6;i++){
+
+                         if(lis1[i].style.color=="white"){
+                           alert("bingo!");
+                           //window.frames["ascent"].document.getElementById("municipal_container").src=lis_url[i];
+                           }
+
+                         }
+
+
+                        //window.frames["ascent"].document.getElementById("municipal_container").src="/offence_build/";
+
+
+                    } else {
+                        $("#login_page").show();
+                        $("#login").show();
+                        $("#user_name").hide();
+                        $("#logout").hide();
+                        $("#message").text(data.message);
+                    }
+                },
+                error:function(){
+                    alert('error');
+                }
+            });
+        });
+
+
+    </script><!-- 登录退出功能  -->
+
+
+    <script>
+    　　function closeWindow()
+    　　{
+          //alert("close");
+    　　　 //window.opener=null;
+          window.open('','_self');
+          window.close();
+    　　}
+    </script><!-- 退出按钮功能 -->
+
+</body>
+</html>

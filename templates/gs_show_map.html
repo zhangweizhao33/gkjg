@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+     {% load staticfiles %}
+    <title>电子沙盘</title>
+    {% load staticfiles %}
+     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/openlayers_v4.5.0/build/ol.js' %}"></script>
+    <script src="{% static 'js/geomap.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/ol.css' %}">
+    <link href="{% static 'css/bootstrap.css'  %}" rel="stylesheet" >
+    <link href="{% static 'css/bootstrap-theme.css' %}"  rel="stylesheet">
+
+    <!--<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>-->
+    <!--<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>-->
+    <script src="{% static 'js/common.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/yds/base.css' %}">
+    <script src="{% static 'js/yds/base.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js"></script>
+     <script >
+
+    </script>
+    <!--<script src="{% static 'js/html2canvas.min.js' %}"></script>-->
+    <!--<script src="{% static 'js/canvas2image.js' %}"></script>-->
+    <style>
+        body{
+            overflow: hidden;
+        }
+        html,body,.map{
+            width: 100%;
+            height: 100%;
+            position:absolute;
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+        .map {
+            overflow-y:auto;
+        }
+
+        .tooltip-static:before {
+            border-top-color: #ffffff;
+        }
+        .form-group {
+            text-align: center;
+            text-align: center;
+            width:90%;
+            margin:0 auto 15px auto;
+        }
+        .type_select{
+            display: -webkit-flex;
+            align-items: center;
+            width:100%;
+        }
+        .input-span {
+            width:30%;
+            text-align:left;
+            margin: 0 0 0 10px;
+        }
+        .form-input,.selectpicker {
+            width:60%;
+            height:34px;
+            color: #999999;
+        }
+        .input-div{
+            width:100%;
+            display: -webkit-flex;
+            align-items: center;
+            margin-top: 10px;
+            color: #999999;
+        }
+
+        #ib_map_compare a, #ib_image_compare a {
+            border-radius:0.2em;
+            display:table;
+            padding:0;
+            display:-webkit-flex;
+            align-items:center;
+            height:100%;
+            outline: none;
+        }
+        .image_compare_span, .map_compare_span{
+            height: 100%;
+            display: -webkit-flex;
+            align-items: center;
+            color:#333
+        }
+         /**
+        * 提示框的样式信息
+        */
+        .tooltip {
+            position: relative;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            color: white;
+            padding: 4px 8px;
+            opacity: .7;
+            white-space: nowrap;
+        }
+
+        .tooltip-measure {
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        .tooltip-static {
+            background-color: #ffffff;
+            color: black;
+            border: 1px solid white;
+        }
+
+        .tooltip-measure:before,
+        .tooltip-static:before {
+            border-top: 6px solid rgba(0, 0, 0, 0.5);
+            border-right: 6px solid transparent;
+            border-left: 6px solid transparent;
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            margin-left: -7px;
+            left: 50%;
+        }
+
+        .tooltip-static:before {
+            border-top-color: #ffffff;
+        }
+        .dzspbtn{
+            width:.8rem;
+            height:.4rem;
+            border-radius:.04rem;
+            border:1px solid #d1d1d3;
+            background:white;
+            color:#717274;
+            font-size:.15rem;
+        }
+        .yy-as{
+            width:.8rem;
+            position:fixed;
+            overflow:hidden;
+            right:.2rem;
+            top:.2rem;
+            color:white;
+            min-height:10px;
+            height:.3rem;
+            background:#0f87f0;
+            font-size:.12rem;
+            float:right;
+            min-width:120px;
+            border-radius:5px;
+            padding-right:.1rem;
+
+        }
+        .yy-n1{
+            float:left;
+            height:.15rem;
+            margin-top:.075rem;
+            margin-left:.05rem;
+        }
+        .dingweishuang{
+            position:fixed;
+            top:1rem;
+            right:.5rem;
+        }
+        .fix{
+            position:fixed;
+            left:1rem;
+            top:.8rem;
+            width:2rem;
+            background:white;
+            font-size:.15rem;
+            opacity:.5;
+            color:black;
+        }
+        .mjxx{
+            width:1rem;
+            float:left;
+        }
+        .chosetime{
+            font-size:.18rem;
+            width:1rem;
+            height:.4rem;
+            line-height:.4rem;
+        }
+        .row{
+             margin-top:.1rem;
+             width: 96%;
+             margin-left:3%;
+             display:-webkit-flex;
+             align-items:center;
+             height:100%;
+             height:.4rem;
+        }
+        .compare-input{
+             width: 1rem;
+             height:.4rem;
+             font-size:.12rem;
+
+        }
+        .makesure{
+            width:.8rem;
+            height:.4rem;
+            margin-left:.2rem;
+            background:#0090ff;
+            color:white;
+            border-radius:5px;
+            font-size:.15rem;
+        }
+        .xl0{
+            margin-left:.2rem;
+        }
+        .download{
+            height:.3rem;
+            line-height:.3rem;
+            font-size:.1rem;
+        }
+        .container{
+            width:94%;
+            margin-left:0;
+             height:87%;
+        }
+        .map{
+            visibility:hidden;
+            opacity:.9
+        }
+        #map{
+             visibility:visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="compare container" style="width:100%; height:10%;">
+        {% csrf_token %}
+        <div class="row">
+                    <span class="chosetime">时间选择:</span>
+
+                    <button  class="yy-as" id="download_btn" ><img src="{% static 'img/baogao.png' %}" class="yy-n1"><p class="download">生成报告</p></button>
+                    <select type="text" class="compare-input" id="imagery">
+                         <option id="oringin_option">正在加载图像</option>
+                    </select>
+                    <button class="makesure" style="" id="confirm_button">确定</button>
+                    <div class="dzspallbtn">
+                    <button class="dzspbtn xl0" id="btn0" >一张图</button>
+                    <button class="dzspbtn xl1" id="btn1">建筑</button>
+                    <button class="dzspbtn xl2" id="btn2">道路</button>
+                    <button class="dzspbtn xl3" id="btn3">草地</button>
+                    <button class="dzspbtn xl4" id="btn4">水域</button>
+                    <button class="dzspbtn xl5" id="btn5">田地</button>
+                    <button class="dzspbtn xl6" id="btn6">大棚</button>
+                    <button class="dzspbtn xl7" id="btn7">林地</button>
+                    </div>
+
+
+
+        </div>
+    </div>
+    <div class="container">
+        <div class="row" id="image" style="width:100%; height:100%">
+            <div class="col-lg-11 col-xs-11" style="height:100%">
+                <div id="map" class="map" ></div>
+            </div>
+        </div>
+    </div>
+        <span class="fix"><p style="float:left">总面积：</p><br><br><p class="mjxx" id="area">0</p><p style="float:right">平方公里</p></span>
+    <ul class="map_image_compare dingweishuang" style="white-space: nowrap;width: .7rem;padding-left: 0;min-width:60px;">
+                        <li class="compare-but" id="ib_map_compare" style="list-style-type:none">
+                            <a id="ib_map_a" href="javascript:void(0)">
+                                <img src="{% static 'img/dituyingxiangtrue.png' %}" style="width:20%;" class="ditu">
+                                <p class="map_compare_span" style="width:50%;margin:0 0 0 20px;font-size:12rm">地图</p>
+                            </a>
+                        </li>
+                        <li class="compare-but" id="ib_image_compare" style="list-style-type:none;margin-top:10px;">
+                            <a id="ib_image_a" href="javascript:void(0)">
+                                <img src="{% static 'img/dituyingxiangtrue.png' %}" style="width:20%;" class="yingxiang">
+                                <p class="image_compare_span" style="width:50%;margin:0 0 0 20px;font-size:12rm">影像</p>
+                            </a>
+                        </li>
+        <li>
+            <button id="show_all">显示所有图像</button>
+        </li>
+                        <script>
+                            var map_selected = true;
+                            var image_selected = true;
+                            $("#ib_map_compare").click(function(){
+                                if (map_selected) {
+                                    $('.ditu').attr('src',"{% static 'img/dituyingxiangfalse.png' %}");
+                                    map_selected = false;
+                                    map.removeLayer(default_geo_layer);
+                                    layer3_cheak()
+                                } else {
+                                    map_selected = true;
+                                    $('.ditu').attr('src',"{% static 'img/dituyingxiangtrue.png' %}");
+                                    map.addLayer(default_geo_layer);
+                                    layer3_cheak()
+                                }
+                            })
+
+                            $("#ib_image_compare").click(function(){
+                                if (image_selected) {
+                                    $('.yingxiang').attr('src',"{% static 'img/dituyingxiangfalse.png' %}");
+                                    image_selected = false;
+                                    map.removeLayer(default_geo_layer2);
+                                    layer3_cheak()
+                                } else {
+                                    $('.yingxiang').attr('src',"{% static 'img/dituyingxiangtrue.png' %}");
+                                    image_selected = true;
+                                    map.addLayer(default_geo_layer2);
+                                    if (map_selected){
+                                        map.removeLayer(default_geo_layer);
+                                        map.addLayer(default_geo_layer);
+                                    }
+                                    layer3_cheak()
+                                }
+                            })
+                            function layer3_cheak(){
+                                if (map_selected && !image_selected){
+                                    map.addLayer(default_geo_layer3);
+                                    map.removeLayer(default_geo_layer);
+                                    map.addLayer(default_geo_layer);
+                                    }
+                                else
+                                    map.removeLayer(default_geo_layer3);
+                            };
+
+                        </script>
+                    </ul>
+    <script src="{% static 'js/gs_show_map.js' %}"></script>
+    <script>
+
+</script>
+
+
+    </div>
+</body>
+</html>
